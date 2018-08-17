@@ -1,0 +1,104 @@
+Sub Stock_Test1()
+
+For Each ws In Worksheets
+    Dim Stock_Total As Long
+    Stock_Total = 2
+    Dim Stock_Name As String
+    Dim Stock_Volume As Double
+    Stock_Volume = CLng(0)
+    ws.Range("H1").Value = "Ticker"
+    ws.Range("I1").Value = "Stock Volume"
+    Dim i As Long
+    Dim LastRow As Long
+    Dim Open_Change As Double
+    Open_Change = CLng(0)
+    Dim Close_Change As Double
+    Close_Change = CLng(0)
+    Dim Percent_Change As Double
+    Dim Yearly_Change As Double
+    Dim Change_Total As Double
+    Change_Total = 2
+    
+    LastRow = ws.Cells(Rows.Count, "A").End(xlUp).Row
+    ws.Range("J1") = "Yearly Change"
+    ws.Range("K1") = "Percent Change"
+    
+    
+            
+    
+
+  
+    For i = 2 To LastRow
+    
+        If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+
+            Stock_Name = ws.Cells(i, 1).Value
+
+            Stock_Volume = Stock_Volume + ws.Cells(i, 7).Value
+
+            ws.Range("H" & Stock_Total).Value = Stock_Name
+
+            ws.Range("I" & Stock_Total).Value = Stock_Volume
+
+            Stock_Total = Stock_Total + CLng(1)
+
+            Stock_Volume = CLng(0)
+
+        Else
+          
+            Stock_Volume = Stock_Volume + ws.Cells(i, 7).Value
+            
+        
+
+        End If
+
+        If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+
+            Stock_Name = ws.Cells(i, 1).Value
+
+            Open_Change = Open_Change + ws.Cells(i, 3).Value
+
+            Close_Change = Close_Change + ws.Cells(i, 6).Value
+            
+            Yearly_Change = ((Close_Change - Open_Change))
+
+            Percent_Change = (((Close_Change - Open_Change) / Open_Change) * 100)
+
+            ws.Range("J" & Change_Total).Value = Yearly_Change
+
+            ws.Range("K" & Change_Total).Value = Percent_Change
+
+            Change_Total = Change_Total + CLng(1)
+            
+            
+           
+           Else
+
+           Open_Change = Open_Change + ws.Cells(i, 3).Value
+
+            Close_Change = Close_Change + ws.Cells(i, 6).Value
+            
+        End If
+
+
+    Next i
+    
+    For i = 2 To LastRow
+         
+         If ws.Cells(i, 10).Value >= 0 Then
+            
+            ws.Cells(i, 10).Interior.ColorIndex = 4
+                
+         ElseIf ws.Cells(i, 10).Value <= 0 Then
+          
+            ws.Cells(i, 10).Interior.ColorIndex = 3
+            
+         End If
+         
+         ws.Cells(i, 11).NumberFormat = "0.00%"
+    Next i
+    
+   
+Next ws
+
+End Sub
